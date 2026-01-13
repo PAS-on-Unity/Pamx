@@ -4,7 +4,7 @@ namespace Pamx.Common.Implementation;
 
 public static class RandomUtil
 {
-    private static Random Random => Random.Shared;
+    private static ThreadLocal<Random> Random { get; } = new(() => new Random());
     
     public static string GenerateId()
     {
@@ -13,11 +13,11 @@ public static class RandomUtil
         
         var builder = new StringBuilder(length);
         for (var i = 0; i < length; i++)
-            builder.Append(chars[Random.Next(chars.Length)]);
+            builder.Append(chars[Random.Value.Next(chars.Length)]);
         
         return builder.ToString();
     }
 
     public static int GenerateLsThemeId()
-        => Random.Next(100000, 1000000);
+        => Random.Value.Next(100000, 1000000);
 }
